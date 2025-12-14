@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthConnect Bot - AI Health Diagnosis Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="8" fill="#4F46E5"/>
+                    <path d="M20 10V30M10 20H30" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                <h1>HealthConnect Bot</h1>
+            </div>
+            <p class="tagline">AI-Powered Health Diagnosis Assistant</p>
+        </header>
+
+        <main>
+            <div class="chat-container">
+                <div class="welcome-message">
+                    <h2>👋 Welcome to HealthConnect</h2>
+                    <p>I'm your AI health assistant. Describe your symptoms, and I'll provide a preliminary diagnosis with medication recommendations.</p>
+                    <div class="disclaimer-box">
+                        <strong>⚠️ Important Disclaimer:</strong> This is a preliminary assessment tool. Always consult with healthcare professionals for accurate diagnosis and treatment.
+                    </div>
+                </div>
+
+                <div id="chatMessages" class="chat-messages"></div>
+            </div>
+
+            <div class="input-container">
+                <form id="symptomForm">
+                    <div class="input-group">
+                        <label for="symptoms">Describe your symptoms</label>
+                        <textarea 
+                            id="symptoms" 
+                            name="symptoms" 
+                            placeholder="e.g., I have a fever, headache, and sore throat for 2 days..."
+                            required
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="age">Age (optional)</label>
+                            <input 
+                                type="number" 
+                                id="age" 
+                                name="age" 
+                                placeholder="e.g., 25"
+                                min="1"
+                                max="120"
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="gender">Gender (optional)</label>
+                            <select id="gender" name="gender">
+                                <option value="">Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-text">Get Diagnosis</span>
+                        <span class="btn-loader" style="display: none;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="white" stroke-width="4" opacity="0.3"/>
+                                <path d="M12 2a10 10 0 0 1 10 10" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 HealthConnect Bot. For informational purposes only.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
