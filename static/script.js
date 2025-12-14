@@ -5,6 +5,125 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnText = document.querySelector('.btn-text');
     const btnIcon = document.querySelector('.btn-icon');
     const btnLoader = document.querySelector('.btn-loader');
+    
+    // Voice recognition
+    const voiceBtn = document.getElementById('voiceBtn');
+    const voiceIndicator = document.getElementById('voiceIndicator');
+    const symptomsTextarea = document.getElementById('symptoms');
+    
+    // Dark mode
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const sunIcon = document.querySelector('.sun-icon');
+    const moonIcon = document.querySelector('.moon-icon');
+    
+    // Language selector
+    const languageSelector = document.getElementById('languageSelector');
+    
+    // Share dialog
+    const shareDialog = document.getElementById('shareDialog');
+    const closeShareBtn = document.getElementById('closeShareBtn');
+    
+    let currentDiagnosisText = '';
+    let recognition = null;
+
+    // Initialize Speech Recognition
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = function() {
+            voiceBtn.classList.add('listening');
+            voiceIndicator.style.display = 'flex';
+            voiceBtn.querySelector('.voice-text').textContent = 'Stop';
+        };
+
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            symptomsTextarea.value = transcript;
+            showNotification('Voice input captured!', 'success');
+        };
+
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error:', event.error);
+            showNotification('Voice input error. Please try again.', 'error');
+        };
+
+        recognition.onend = function() {
+            voiceBtn.classList.remove('listening');
+            voiceIndicator.style.display = 'none';
+            voiceBtn.querySelector('.voice-text').textContent = 'Speak';
+        };
+    }
+
+    // Voice button click
+    if (voiceBtn && recognition) {
+        voiceBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (voiceBtn.classList.contains('listening')) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        });
+    } else if (voiceBtn) {
+        voiceBtn.style.display = 'none';
+    }
+
+    // Dark mode toggle
+    darkModeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        
+        sunIcon.style.display = isDark ? 'none' : 'block';
+        moonIcon.style.display = isDark ? 'block' : 'none';
+        
+        localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        showNotification(isDark ? '🌙 Dark mode enabled' : '☀️ Light mode enabled', 'success');
+    });
+
+    // Check for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+    }
+
+    // Language selector (basic implementation)
+    languageSelector.addEventListener('change', function() {
+        const lang = this.value;
+        showNotification(`Language changed to ${this.options[this.selectedIndex].text}`, 'success');
+        // In a full implementation, you would translate the UI here
+    });
+
+    // Share dialog handlers
+    closeShareBtn.addEventListener('click', function() {
+        shareDialog.style.display = 'none';
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', function() {
+        navigator.clipboard.writeText(currentDiagnosisText).then(() => {
+            showNotification('✅ Diagnosis copied to clipboard!', 'success');
+            shareDialog.style.display = 'none';
+        }).catch(() => {
+            showNotification('Failed to copy. Please try again.', 'error');
+        });
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+        downloadAsPDF(currentDiagnosisText);
+        showNotification('📄 Downloading diagnosis...', 'success');
+        shareDialog.style.display = 'none';
+    });
+
+    document.getElementById('emailBtn').addEventListener('click', function() {
+        const subject = encodeURIComponent('HealthConnect Diagnosis Report');
+        const body = encodeURIComponent(currentDiagnosisText);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+        shareDialog.style.display = 'none';
+    });
 
     // Hide loading overlay after page loads
     setTimeout(() => {
@@ -179,6 +298,20 @@ document.addEventListener('DOMContentLoaded', function() {
         disclaimerDiv.className = 'disclaimer-text';
         disclaimerDiv.textContent = disclaimer;
         
+        // Add share button
+        const shareBtn = document.createElement('button');
+        shareBtn.className = 'share-diagnosis-btn';
+        shareBtn.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49M21 5C21 6.65685 19.6569 8 18 8C16.3431 8 15 6.65685 15 5C15 3.34315 16.3431 2 18 2C19.6569 2 21 3.34315 21 5ZM9 12C9 13.6569 7.65685 15 6 15C4.34315 15 3 13.6569 3 12C3 10.3431 4.34315 9 6 9C7.65685 9 9 10.3431 9 12ZM21 19C21 20.6569 19.6569 22 18 22C16.3431 22 15 20.6569 15 19C15 17.3431 16.3431 16 18 16C19.6569 16 21 17.3431 21 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Share Diagnosis
+        `;
+        shareBtn.onclick = function() {
+            currentDiagnosisText = `HEALTHCONNECT DIAGNOSIS REPORT\n\n${diagnosis}\n\n${disclaimer}`;
+            document.getElementById('shareDialog').style.display = 'flex';
+        };
+        
         contentDiv.appendChild(headerDiv);
         contentDiv.appendChild(diagnosisDiv);
         messageDiv.appendChild(contentDiv);
@@ -198,11 +331,25 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 diagnosisDiv.innerHTML = formattedDiagnosis;
                 contentDiv.appendChild(disclaimerDiv);
+                contentDiv.appendChild(shareBtn);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
         }
         
         typeText();
+    }
+
+    function downloadAsPDF(text) {
+        // Create a simple text file download (PDF would require a library)
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `HealthConnect-Diagnosis-${new Date().toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
     }
 
     function formatDiagnosis(text) {
