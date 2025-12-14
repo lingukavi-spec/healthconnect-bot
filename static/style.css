@@ -806,6 +806,37 @@ footer p::before {
     flex-shrink: 0;
 }
 
+/* Developer Credit */
+.developer-credit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.developer-credit svg {
+    color: var(--medical-blue);
+    flex-shrink: 0;
+}
+
+.developer-credit strong {
+    color: var(--medical-blue);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+body.dark-mode .developer-credit {
+    border-top-color: var(--border-color);
+}
+
 /* Scrollbar Styling */
 .chat-messages::-webkit-scrollbar {
     width: 8px;
