@@ -362,6 +362,31 @@ header::after {
     z-index: 1;
 }
 
+/* Header Credit */
+.header-credit {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+}
+
+.header-credit span {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+.header-credit strong {
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 1.05rem;
+}
+
 main {
     padding: 40px;
 }
@@ -813,28 +838,36 @@ footer p::before {
     justify-content: center;
     gap: 8px;
     margin-top: 20px;
-    padding-top: 20px;
+    padding: 15px 20px;
     border-top: 2px solid var(--border-color);
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .developer-credit svg {
     color: var(--medical-blue);
     flex-shrink: 0;
+    width: 20px;
+    height: 20px;
 }
 
 .developer-credit strong {
     color: var(--medical-blue);
     font-weight: 700;
+    font-size: 1.15rem;
     background: linear-gradient(135deg, var(--medical-blue) 0%, var(--medical-teal) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow: 0 2px 4px rgba(14, 165, 233, 0.2);
 }
 
 body.dark-mode .developer-credit {
     border-top-color: var(--border-color);
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.2) 0%, rgba(20, 184, 166, 0.2) 100%);
 }
 
 /* Scrollbar Styling */
