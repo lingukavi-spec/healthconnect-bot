@@ -3,7 +3,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatMessages = document.getElementById('chatMessages');
     const submitBtn = document.getElementById('submitBtn');
     const btnText = document.querySelector('.btn-text');
+    const btnIcon = document.querySelector('.btn-icon');
     const btnLoader = document.querySelector('.btn-loader');
+
+    // Hide loading overlay after page loads
+    setTimeout(() => {
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'none';
+        }
+    }, 2000);
+
+    // Add input animations
+    const inputs = document.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'translateY(-2px)';
+            this.parentElement.style.transition = 'transform 0.2s ease';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'translateY(0)';
+        });
+    });
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -13,14 +35,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const gender = document.getElementById('gender').value;
 
         if (!symptoms) {
-            alert('Please describe your symptoms');
+            showNotification('Please describe your symptoms', 'error');
             return;
         }
 
         // Disable form while processing
         setLoading(true);
 
-        // Display user message
+        // Display user message with animation
         addMessage('user', `Symptoms: ${symptoms}${age ? `, Age: ${age}` : ''}${gender ? `, Gender: ${gender}` : ''}`);
 
         try {
@@ -39,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (response.ok && data.success) {
-                // Display bot response
-                addBotDiagnosis(data.diagnosis, data.disclaimer, data.source);
+                // Display bot response with typing effect
+                addBotDiagnosisWithTyping(data.diagnosis, data.disclaimer, data.source);
             } else {
                 addMessage('bot', `❌ Error: ${data.error || 'Failed to get diagnosis. Please try again.'}`, true);
             }
@@ -58,7 +80,32 @@ document.addEventListener('DOMContentLoaded', function() {
     function setLoading(isLoading) {
         submitBtn.disabled = isLoading;
         btnText.style.display = isLoading ? 'none' : 'inline';
+        btnIcon.style.display = isLoading ? 'none' : 'inline';
         btnLoader.style.display = isLoading ? 'inline-flex' : 'none';
+    }
+
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: ${type === 'error' ? '#EF4444' : '#0EA5E9'};
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
 
     function addMessage(type, content, isError = false) {
@@ -109,6 +156,53 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Scroll to bottom
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addBotDiagnosisWithTyping(diagnosis, disclaimer, source) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message bot';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'message-header';
+        headerDiv.innerHTML = `
+            🤖 HealthConnect Bot
+            <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.7;">(${source})</span>
+        `;
+        
+        const diagnosisDiv = document.createElement('div');
+        diagnosisDiv.className = 'diagnosis-content';
+        
+        const disclaimerDiv = document.createElement('div');
+        disclaimerDiv.className = 'disclaimer-text';
+        disclaimerDiv.textContent = disclaimer;
+        
+        contentDiv.appendChild(headerDiv);
+        contentDiv.appendChild(diagnosisDiv);
+        messageDiv.appendChild(contentDiv);
+        chatMessages.appendChild(messageDiv);
+        
+        // Typing effect
+        let index = 0;
+        const formattedDiagnosis = formatDiagnosis(diagnosis);
+        const typingSpeed = 10; // milliseconds per character
+        
+        function typeText() {
+            if (index < formattedDiagnosis.length) {
+                diagnosisDiv.innerHTML = formattedDiagnosis.substring(0, index + 1) + '<span class="typing-cursor">|</span>';
+                index++;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                setTimeout(typeText, typingSpeed);
+            } else {
+                diagnosisDiv.innerHTML = formattedDiagnosis;
+                contentDiv.appendChild(disclaimerDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+        
+        typeText();
     }
 
     function formatDiagnosis(text) {

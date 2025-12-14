@@ -4,10 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HealthConnect Bot - AI Health Diagnosis Assistant</title>
+    <meta name="description" content="AI-powered health diagnosis assistant. Get preliminary diagnosis and medication recommendations based on your symptoms.">
+    <meta name="keywords" content="health, diagnosis, AI, medical assistant, symptoms, medication">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230EA5E9'/><path d='M50 25V75M25 50H75' stroke='white' stroke-width='10' stroke-linecap='round'/><path d='M50 65C50 65 35 52 35 42C35 35 40 32 45 32C47.5 32 50 34 50 34C50 34 52.5 32 55 32C60 32 65 35 65 42C65 52 50 65 50 65Z' fill='white' opacity='0.9'/></svg>">
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-container">
+            <div class="loading-logo">
+                <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="url(#gradient1)" stroke="white" stroke-width="3"/>
+                    <path d="M50 25V75M25 50H75" stroke="white" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M50 65C50 65 35 52 35 42C35 35 40 32 45 32C47.5 32 50 34 50 34C50 34 52.5 32 55 32C60 32 65 35 65 42C65 52 50 65 50 65Z" fill="white" opacity="0.9"/>
+                    <circle cx="70" cy="70" r="8" stroke="white" stroke-width="2.5" fill="none"/>
+                    <path d="M70 62V55" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="gradient1" x1="0" y1="0" x2="100" y2="100">
+                            <stop offset="0%" style="stop-color:#0EA5E9;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0284C7;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="loading-text">HealthConnect</div>
+            <div class="loading-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <p class="loading-subtext">Initializing your health assistant...</p>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <div class="logo">
@@ -112,12 +146,14 @@
                     </div>
 
                     <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-icon">🔬</span>
                         <span class="btn-text">Get Diagnosis</span>
                         <span class="btn-loader" style="display: none;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="12" cy="12" r="10" stroke="white" stroke-width="4" opacity="0.3"/>
                                 <path d="M12 2a10 10 0 0 1 10 10" stroke="white" stroke-width="4" stroke-linecap="round"/>
                             </svg>
+                            <span class="analyzing-text">Analyzing...</span>
                         </span>
                     </button>
                 </form>
@@ -126,6 +162,29 @@
 
         <footer>
             <p>&copy; 2025 HealthConnect Bot. For informational purposes only.</p>
+            <div class="footer-links">
+                <span class="footer-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#0EA5E9" stroke-width="2"/>
+                        <path d="M12 8V12L14.5 14.5" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    24/7 Available
+                </span>
+                <span class="footer-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 15C15.866 15 19 11.866 19 8C19 4.13401 15.866 1 12 1C8.13401 1 5 4.13401 5 8C5 11.866 8.13401 15 12 15Z" stroke="#10B981" stroke-width="2"/>
+                        <path d="M3 21C3 17.134 7.02944 14 12 14C16.9706 14 21 17.134 21 21" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Confidential
+                </span>
+                <span class="footer-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 11L12 14L22 4" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    AI-Powered
+                </span>
+            </div>
         </footer>
     </div>
 
