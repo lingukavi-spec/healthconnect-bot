@@ -11,22 +11,63 @@
     <div class="container">
         <header>
             <div class="logo">
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="40" height="40" rx="8" fill="#4F46E5"/>
-                    <path d="M20 10V30M10 20H30" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                <svg width="50" height="50" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Medical Cross Background Circle -->
+                    <circle cx="50" cy="50" r="48" fill="url(#gradient1)" stroke="white" stroke-width="3"/>
+                    <!-- Medical Cross -->
+                    <path d="M50 25V75M25 50H75" stroke="white" stroke-width="10" stroke-linecap="round"/>
+                    <!-- Heart Symbol -->
+                    <path d="M50 65C50 65 35 52 35 42C35 35 40 32 45 32C47.5 32 50 34 50 34C50 34 52.5 32 55 32C60 32 65 35 65 42C65 52 50 65 50 65Z" fill="white" opacity="0.9"/>
+                    <!-- Stethoscope accent -->
+                    <circle cx="70" cy="70" r="8" stroke="white" stroke-width="2.5" fill="none"/>
+                    <path d="M70 62V55" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="gradient1" x1="0" y1="0" x2="100" y2="100">
+                            <stop offset="0%" style="stop-color:#0EA5E9;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#0284C7;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
                 </svg>
-                <h1>HealthConnect Bot</h1>
+                <div class="logo-text">
+                    <h1>HealthConnect</h1>
+                    <span class="logo-subtitle">Medical AI Assistant</span>
+                </div>
             </div>
-            <p class="tagline">AI-Powered Health Diagnosis Assistant</p>
+            <p class="tagline">🩺 Your Trusted AI-Powered Health Diagnosis Partner</p>
         </header>
 
         <main>
             <div class="chat-container">
                 <div class="welcome-message">
+                    <div class="welcome-icon">
+                        <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" fill="#E0F2FE" stroke="#0EA5E9" stroke-width="2"/>
+                            <path d="M50 30C45 30 42 33 42 38C42 43 45 46 50 55C55 46 58 43 58 38C58 33 55 30 50 30Z" fill="#0EA5E9"/>
+                            <path d="M35 60H65M40 67H60M42 74H58" stroke="#0EA5E9" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
                     <h2>👋 Welcome to HealthConnect</h2>
-                    <p>I'm your AI health assistant. Describe your symptoms, and I'll provide a preliminary diagnosis with medication recommendations.</p>
+                    <p class="welcome-desc">Your trusted AI medical assistant. Describe your symptoms, and receive a comprehensive preliminary diagnosis with personalized medication recommendations.</p>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <span class="feature-icon">🔬</span>
+                            <span>AI Analysis</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">💊</span>
+                            <span>Medication Guide</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">⚡</span>
+                            <span>Instant Results</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🛡️</span>
+                            <span>Safe & Secure</span>
+                        </div>
+                    </div>
                     <div class="disclaimer-box">
-                        <strong>⚠️ Important Disclaimer:</strong> This is a preliminary assessment tool. Always consult with healthcare professionals for accurate diagnosis and treatment.
+                        <strong>⚠️ Medical Disclaimer:</strong> This is a preliminary assessment tool powered by AI. Always consult licensed healthcare professionals for accurate diagnosis and treatment. In case of emergency, call your local emergency services immediately.
                     </div>
                 </div>
 
